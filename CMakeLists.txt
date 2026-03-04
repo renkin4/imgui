@@ -23,8 +23,10 @@ add_library(imgui::imgui ALIAS imgui)
 
 target_include_directories(imgui
     PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_CURRENT_SOURCE_DIR}/backends
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/backends>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/imgui>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/imgui/backends>
 )
 
 target_link_libraries(imgui PUBLIC glfw)
@@ -36,7 +38,6 @@ endif()
 include(GNUInstallDirs)
 
 install(TARGETS imgui
-    EXPORT imguiTargets
     ARCHIVE DESTINATION lib/$<CONFIG>
 )
 
@@ -67,8 +68,3 @@ if(YENGINE_WITH_VULKAN)
     )
 endif()
 
-install(EXPORT imguiTargets
-    FILE imguiTargets.cmake
-    NAMESPACE imgui::
-    DESTINATION lib/cmake/imgui
-)
