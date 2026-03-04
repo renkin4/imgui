@@ -32,3 +32,43 @@ target_link_libraries(imgui PUBLIC glfw)
 if(YENGINE_WITH_VULKAN)
     target_link_libraries(imgui PUBLIC Vulkan::Vulkan)
 endif()
+
+include(GNUInstallDirs)
+
+install(TARGETS imgui
+    EXPORT imguiTargets
+    ARCHIVE DESTINATION lib/$<CONFIG>
+)
+
+install(FILES
+    imgui.h
+    imgui_internal.h
+    imconfig.h
+    imstb_rectpack.h
+    imstb_textedit.h
+    imstb_truetype.h
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/imgui
+)
+
+install(FILES
+    backends/imgui_impl_glfw.h
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/imgui/backends
+)
+
+if(YENGINE_WITH_DX12)
+    install(FILES backends/imgui_impl_dx12.h
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/imgui/backends
+    )
+endif()
+
+if(YENGINE_WITH_VULKAN)
+    install(FILES backends/imgui_impl_vulkan.h
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/imgui/backends
+    )
+endif()
+
+install(EXPORT imguiTargets
+    FILE imguiTargets.cmake
+    NAMESPACE imgui::
+    DESTINATION lib/cmake/imgui
+)
